@@ -41,6 +41,7 @@ public class InstallerHelperService extends AccessibilityService {
             }
         }
         findAndClickView(rootNode);
+        rootNode.recycle();
     }
 
     /**
@@ -48,10 +49,9 @@ public class InstallerHelperService extends AccessibilityService {
      */
     private void fillPassword(AccessibilityNodeInfo rootNode, String password) {
         AccessibilityNodeInfo editText = rootNode.findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
-        Log.i(TAG, "editText: " + (editText == null));
         if (editText == null) return;
 
-        Log.i(TAG, "editText: " + editText.getPackageName() + " " + editText.getClassName().equals("android.widget.EditText"));
+        Log.i(TAG, "editText: " + editText.getPackageName() + " " + editText.getClassName());
         if (editText.getPackageName().equals("com.bbk.account")
                 && editText.getClassName().equals("android.widget.EditText")) {
             Bundle arguments = new Bundle();
@@ -59,6 +59,8 @@ public class InstallerHelperService extends AccessibilityService {
                     .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, password);
             editText.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
         }
+
+        editText.recycle();
     }
 
     /**
@@ -73,6 +75,10 @@ public class InstallerHelperService extends AccessibilityService {
 
         for (AccessibilityNodeInfo nodeInfo : nodeInfoList) {
             nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        }
+
+        for (AccessibilityNodeInfo nodeInfo: nodeInfoList) {
+            nodeInfo.recycle();
         }
     }
 
