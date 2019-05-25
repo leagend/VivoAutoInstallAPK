@@ -78,5 +78,6 @@ public class InstallerHelperService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
+        Log.i(TAG, "onInterrupt");
     }
 }
