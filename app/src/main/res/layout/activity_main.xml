@@ -31,4 +31,16 @@
         android:maxLines="1"
         android:imeOptions="actionDone" />
   </android.support.design.widget.TextInputLayout>
+
+  <TextView
+      android:id="@+id/textView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="TextView" />
+
+  <Button
+      android:id="@+id/button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="开启服务" />
 </LinearLayout>
