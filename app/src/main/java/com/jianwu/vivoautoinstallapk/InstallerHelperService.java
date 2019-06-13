@@ -31,8 +31,8 @@ public class InstallerHelperService extends AccessibilityService {
         AccessibilityNodeInfo rootNode = getRootInActiveWindow();
         if (rootNode == null) return;
 
-        if (event.getPackageName().equals("com.vivo.secime.service")) {
-            //vivo账号密码
+        if (event.getPackageName().equals("com.vivo.secime.service") || event.getPackageName().equals("com.android.packageinstaller")) {
+            //vivo或oppo账号密码
             String password = (String) SharePreferencesUtils.getParam(getApplicationContext(),
                     AppConstants.KEY_PASSWORD, "");
 //            Log.i(TAG, "password: " + password);
@@ -49,15 +49,25 @@ public class InstallerHelperService extends AccessibilityService {
      */
     private void fillPassword(AccessibilityNodeInfo rootNode, String password) {
         AccessibilityNodeInfo editText = rootNode.findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
-        if (editText == null) return;
-
-        Log.i(TAG, "editText: " + editText.getPackageName() + " " + editText.getClassName());
-        if (editText.getPackageName().equals("com.bbk.account")
-                && editText.getClassName().equals("android.widget.EditText")) {
-            Bundle arguments = new Bundle();
-            arguments.putCharSequence(AccessibilityNodeInfo
-                    .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, password);
-            editText.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
+        if (editText == null) {
+            try {
+                Thread.sleep(1000);
+                Runtime.getRuntime().exec("input text "+password);
+                Runtime.getRuntime().exec("input keyevent 61");
+                Runtime.getRuntime().exec("input keyevent 61");
+                Runtime.getRuntime().exec("input keyevent 66");
+            } catch (Exception e) {
+                return ;
+            }
+        }
+        else {
+            if ((editText.getPackageName().equals("com.bbk.account") || editText.getPackageName().equals("com.coloros.safecenter"))
+                    && editText.getClassName().equals("android.widget.EditText")) {
+                Bundle arguments = new Bundle();
+                arguments.putCharSequence(AccessibilityNodeInfo
+                        .ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, password);
+                editText.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
+            }
         }
 
         editText.recycle();
